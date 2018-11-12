@@ -136,6 +136,9 @@ public class HcDBScanAlgorithm {
 	}
 	
 	public static Map<String,Double> getAdjacentList( Map<String,Cluster>  clusterMap ){
+		
+		//TODO implement algorithm
+		
 		return new HashMap<String,Double>();
 	}
 	
