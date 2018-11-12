@@ -14,6 +14,7 @@ public class Clarans {
 	public int numLocal;
 	
 	
+	
 	public Clarans( List<DataPoint> dataset, List<DataPoint> centroids ) {
 		
 
