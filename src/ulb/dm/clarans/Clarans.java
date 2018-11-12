@@ -8,10 +8,15 @@ import ulb.dm.clustering.Cluster;;
 
 public class Clarans {
 	
+	public int n;
+	public int k;
+	public int maxNeighbors;
+	public int numLocal;
 	
 	
-	
-	public static List<Cluster> clarans( List<DataPoint> dataset, List<DataPoint> centroids ) {
+	public Clarans( List<DataPoint> dataset, List<DataPoint> centroids ) {
+		
+
 		
 		List<Cluster> claransClusters = new ArrayList<>();
 		
@@ -28,9 +33,7 @@ public class Clarans {
 			//else keep current centroids
 		
 		//Once clarans is finished return the Model
-		
-		
-		return claransClusters;
+
 	}
 	
 	
