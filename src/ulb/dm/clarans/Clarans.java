@@ -41,6 +41,9 @@ public class Clarans {
 		int n = dataset.size();
 		int k = centroids.size();
 		
+		//Creates dissimilarity matrix with centroids from the Hilbert Curve
+		DissimilarityMatrix matrix = new DissimilarityMatrix(dataset, centroids);
+		
 		List<DataPoint> h = getRandomNode(dataset,centroids);
 		
 
