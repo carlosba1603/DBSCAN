@@ -15,9 +15,15 @@ public class Clarans {
 	
 	
 	
-	public Clarans( List<DataPoint> dataset, List<DataPoint> centroids ) {
+	public Clarans( List<DataPoint> dataset, List<DataPoint> centroids, int maxNeighbors, int numLocal ) {
 		
-
+		n = dataset.size();
+		k = centroids.size();
+		this.maxNeighbors = maxNeighbors;
+		this.numLocal = numLocal;
+		
+	
+		claransAlgorithm();
 		
 		List<Cluster> claransClusters = new ArrayList<>();
 		
@@ -36,6 +42,65 @@ public class Clarans {
 		//Once clarans is finished return the Model
 
 	}
+	
+	
+	//Clarans 
+	public List<DataPoint> ClaransAlgorithm ()
+	{
+		ArrayList <DissimilarityMatrix> dyssimilarityMatrix = new DataPoint [n][2];
+		
+		
+		
+		//
+		for (int i = 0; i < numLocal; i ++)
+		{
+			
+		}
+	}
+	
+	//Choose random node
+	
+	public List<DataPoint> getRandomNode (List<DataPoint> dataset, List<DataPoint> centroids)
+	{
+	
+	int index = (int) Math.round((Math.random()*k));
+	boolean stop = false;	
+	DataPoint centroid = null;
+	List<DataPoint> newNode = new ArrayList<DataPoint>();
+
+    while (!stop) {
+        
+    	stop = true;	
+        centroid = dataset.get((int) Math.round(Math.random()*n));
+        
+        for (int i = 0; i < k; i++)
+        {
+            if (centroid == centroids.get(i)) 
+            {
+            	stop = false;
+                break;
+            }
+        }
+    }
+
+    for (int j = 0; j < centroids.size();j++)
+    { 	
+    	if (j == index)
+    	{
+    		newNode.add(centroid);
+    	}
+    	newNode.add(centroids.get(j));	
+    }
+
+    
+    return newNode;
+	}
+	
+	//Change centroid
+	
+	public DissimilarityMatrix changeCentroid (List<DataPoint> dataset)
+	
+	
 	
 	
 	public static DataPoint getNewCentroid( List<DataPoint> dataset, DataPoint currentCentroid, int maxNeighbor, int numLocal ) {

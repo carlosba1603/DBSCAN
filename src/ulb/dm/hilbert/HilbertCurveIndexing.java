@@ -1,5 +1,6 @@
 package ulb.dm.hilbert;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,9 +8,11 @@ import ulb.dm.clustering.Cluster;
 import ulb.dm.clustering.DataPoint;
 
 
-public class HilbertCurveIndexing {
-
-	public static void indexData( List<DataPoint> dataset ){
+public class HilbertCurveIndexing 
+{
+	
+	public static void indexData( List<DataPoint> dataset )
+	{
 		
 		
 		

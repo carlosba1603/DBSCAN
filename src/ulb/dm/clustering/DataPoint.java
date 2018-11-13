@@ -2,6 +2,7 @@ package ulb.dm.clustering;
 import java.util.HashMap;
 
 
+
 public class DataPoint {
 	
 	
@@ -12,14 +13,16 @@ public class DataPoint {
 	public DataPointType pointType;
 	public boolean visited;
 	public boolean clustered;
+	public String id;
 	
 	
-	public DataPoint( HashMap<String,String> attributtes, String idAttribute ) {
+	public DataPoint( HashMap<String,String> attributtes, String idAttribute, String id ) 
+	{
 		
 		this.attributtes = attributtes;
 		this.idAttribute = idAttribute;
 		this.pointType = DataPointType.NOISE;
-		
+		this.id = id;
 	}
 	
 	public double getEuclidianDistance( DataPoint p1  ) {

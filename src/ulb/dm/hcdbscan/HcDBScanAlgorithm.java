@@ -70,7 +70,10 @@ public class HcDBScanAlgorithm {
 		
 		
 		//Get clarans clusters for DBSCAN
-		List<Cluster> claransClusterList = Clarans.clarans(dataset, centroids);
+		int maxNeighbors = 0; //To confirm with Ainhoa 
+		int numLocal = 0;
+		
+		List<Cluster> claransClusterList = Clarans.clarans(dataset, centroids, maxNeighbors,numLocal);
 		
 		//Apply DBSCAN on each CLARANS cluster
 		for( Cluster claransCluster : claransClusterList ) {
