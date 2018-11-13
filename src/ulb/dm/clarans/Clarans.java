@@ -34,9 +34,10 @@ public class Clarans {
 		hc3.put("Actions", "id141");
 		hc3.put("C1", "50.3583738409");
 		hc3.put("C2", "47.3792286943");	
-		DataPoint c3 = new DataPoint(hc3, "id141");
+		DataPoint c3 = new DataPoint(hc3, "id141");        
 		centroids.add(c3);	
 
+		
 		
 		int n = dataset.size();
 		int k = centroids.size();
