@@ -57,6 +57,8 @@ public class HcDBScanAlgorithm {
 		}
 		
 		System.out.println("Finished");
+		
+		
 	}
 	
 	public static List<Cluster> hcDbscan( List<DataPoint> dataset, double alfa, double epsilon,  int minPoints ){
