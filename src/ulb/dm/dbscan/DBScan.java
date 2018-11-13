@@ -31,6 +31,14 @@ public class DBScan {
 			}
 		}
 		
+		int i = 0;
+		
+		for( Cluster c : clusterList ) {
+			
+			System.out.println( "Cluster "+(i++)+" :\t"+c.dataPoints.size() );
+			
+		}
+		
 		return clusterList;
 		
 	}
