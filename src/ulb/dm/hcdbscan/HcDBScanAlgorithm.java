@@ -34,8 +34,8 @@ public class HcDBScanAlgorithm {
 		
 		List<DataPoint> dataset = new ArrayList<>();
 		double epsilon = 5.0;
-		double alfa = 5.0;
-		int minPoints = 5;
+		double alfa = 0.3;
+		int minPoints = 3;
 		
 		try {
 			
@@ -48,16 +48,26 @@ public class HcDBScanAlgorithm {
 		
 		
 		
-		List<Cluster> hcDbscan = hcDbscan(  dataset, alfa, epsilon,  minPoints );
+		List<Cluster> hcDbscan = hcDbscanIndividualTest(  dataset, alfa, epsilon,  minPoints );
+		//List<Cluster> hcDbscan = hcDbscan(  dataset, alfa, epsilon,  minPoints );
 		
-		for( Cluster c : hcDbscan ) {
-			
-			System.out.println("Size: "+c.dataPoints.size());
-			
-		}
 		
-		System.out.println("Finished");
+		System.out.println("\nFinished");
 		
+		
+	}
+	
+public static List<Cluster> hcDbscanIndividualTest( List<DataPoint> dataset, double alfa, double epsilon,  int minPoints ){
+		
+		List<Cluster> hcDbscanClusterList;
+		
+		List<Cluster> claransClusterList = DBScan.dbscan(dataset, epsilon, minPoints);
+		
+		Map<String,Cluster> labelClusterList = labelClusterList( claransClusterList );
+		//Merge all DBSCAN clusters
+		hcDbscanClusterList = mergeDbscanClusters( labelClusterList, alfa, 10.0 );
+		
+		return hcDbscanClusterList;
 		
 	}
 	
@@ -90,7 +100,7 @@ public class HcDBScanAlgorithm {
 		}
 		
 		//Merge all DBSCAN clusters
-		hcDbscanClusterList = mergeDbscanClusters( labelClusterList( clusterListBeforeMerge ), alfa, 10.0 );
+		hcDbscanClusterList = mergeDbscanClusters( labelClusterList( clusterListBeforeMerge ), alfa, epsilon );
 		
 		return hcDbscanClusterList;
 		
@@ -106,12 +116,6 @@ public class HcDBScanAlgorithm {
 			c.label = ""+i;
 			
 			clusterMap.put(""+i, c);
-			
-		}
-		
-		for( Map.Entry<String, Cluster> entry : clusterMap.entrySet() ) {
-			
-			System.out.println( entry.getKey() +" - "+entry.getValue().dataPoints.size() );
 			
 		}
 		
@@ -139,13 +143,16 @@ public class HcDBScanAlgorithm {
 				
 				clusterList.add( newCluster );
 				
-				
 			}
 		}
 		
+		System.out.println("\n======================= After DBSCAN merge ========================");
+		
+		int i = 0;
+		
 		for( Cluster c : clusterList ) {
 			
-			System.out.println( c.dataPoints.size() );
+			System.out.println( "Cluster "+(i++)+" :\t"+c.dataPoints.size() );
 			
 		}
 		
@@ -168,7 +175,8 @@ public class HcDBScanAlgorithm {
 						
 						double currentAlfa = getRIAlfa( c, d, epsilon );
 						
-						interconectivityAdjacentList.put( c.label+"-"+d.label, currentAlfa );
+						if( currentAlfa != 0.0 )
+							interconectivityAdjacentList.put( c.label+"-"+d.label, currentAlfa );
 						
 					}
 					
@@ -178,18 +186,17 @@ public class HcDBScanAlgorithm {
 			
 		}		
 		
-		return new HashMap<String,Double>();
+		return interconectivityAdjacentList;
 	}
 	
 	public static double getRIAlfa( Cluster c, Cluster d , double epsilon ) {
 		
 		double alfa = 0.0;
-		
 
 		List<Double> edges = getEdges( c, d , epsilon );
 
-
-		alfa = edges.size() / getSumEdges( edges );
+		if( edges.size() > 0 )
+			alfa = (double)edges.size() / getSumEdges( edges );
 		
 		return alfa;
 		
@@ -275,7 +282,9 @@ public class HcDBScanAlgorithm {
 		//LOOK FOR EVERY POINT IN THE dataset TO KNOW IF ITS A NEIGHBOUR OF P.
 		for( String key : adjacentList.keySet() ) {
 
-			if( key.contains(c.label) ) {
+			String clusterKeys[] = key.split("-");
+			
+			if( clusterKeys[0].equals( c.label ) || clusterKeys[1].equals( c.label )  ) {
 			
 				double aDistance = adjacentList.get(key);
 				
