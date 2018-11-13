@@ -80,10 +80,10 @@ public class Clarans {
 	
 	int k = centroids.size();
 	int n = dataset.size();
-		
+		 
 	Random r = new Random();
 	int index = r.nextInt(k);
-	int indexC = r.nextInt(n);
+	int indexC = r.nextInt(n); 
 	boolean stop = false;	
 	DataPoint centroid = null;
 	List<DataPoint> newNode = new ArrayList<DataPoint>(centroids);
