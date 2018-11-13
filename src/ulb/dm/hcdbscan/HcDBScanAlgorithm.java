@@ -73,8 +73,8 @@ public class HcDBScanAlgorithm {
 		
 		
 		//Get clarans clusters for DBSCAN
-		int maxNeighbors = 0; //To confirm with Ainhoa 
-		int numLocal = 0;
+		int maxNeighbors = 2; //To confirm with Ainhoa 
+		int numLocal = 2;
 		
 		List<Cluster> claransClusterList = Clarans.clarans(dataset, centroids, maxNeighbors,numLocal);
 		

@@ -1,33 +1,54 @@
 package ulb.dm.clarans;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import ulb.dm.clustering.DataPoint;
 import ulb.dm.clustering.Cluster;;
 
 public class Clarans {
 	
-	public int n;
-	public int k;
-	public int maxNeighbors;
-	public int numLocal;
-	
-	
+
 	
 	public static List<Cluster> clarans( List<DataPoint> dataset, List<DataPoint> centroids, int maxNeighbors, int numLocal ) {
 		
-		centroids = getRandomCentroids(dataset);
 		
-		n = dataset.size();
-		k = centroids.size();
-		this.maxNeighbors = maxNeighbors;
-		this.numLocal = numLocal;
+		centroids = new ArrayList<DataPoint> ();
+		HashMap<String,String> hc1 = new HashMap<String,String> ();
+		hc1.put("Actions", "id137");
+		hc1.put("C1", "6.47390395996");
+		hc1.put("C2", "93.7242014429");	
+		DataPoint c1 = new DataPoint(hc1, "id137");
+		centroids.add(c1);
 		
-	
-		claransAlgorithm();
+		HashMap<String,String> hc2 = new HashMap<String,String> ();
+		hc2.put("Actions", "id91");
+		hc2.put("C1", "94.1977118379");
+		hc2.put("C2", "4.09522116449");	
+		DataPoint c2 = new DataPoint(hc2, "id91");
+		centroids.add(c2);
+		
+		HashMap<String,String> hc3 = new HashMap<String,String> ();
+		hc3.put("Actions", "id141");
+		hc3.put("C1", "50.3583738409");
+		hc3.put("C2", "47.3792286943");	
+		DataPoint c3 = new DataPoint(hc3, "id141");
+		centroids.add(c3);	
+
+		
+		int n = dataset.size();
+		int k = centroids.size();
+		
+		List<DataPoint> h = getRandomNode(dataset,centroids);
+		
+
+		//claransAlgorithm();
 		
 		List<Cluster> claransClusters = new ArrayList<>();
+		
+		return null;
 		
 		//Create clusters based in the k centroids
 		
@@ -49,58 +70,49 @@ public class Clarans {
 	//Clarans 
 	public List<DataPoint> ClaransAlgorithm ()
 	{
-		ArrayList <DissimilarityMatrix> dyssimilarityMatrix = new DataPoint [n][2];
-		
-		
-		
-		//
-		for (int i = 0; i < numLocal; i ++)
-		{
-			
-		}
+		return null;
 	}
 	
-	//Choose random node
+	//Change one centroid randomly
 	
-	public List<DataPoint> getRandomNode (List<DataPoint> dataset, List<DataPoint> centroids)
+	public static List<DataPoint> getRandomNode (List<DataPoint> dataset, List<DataPoint> centroids)
 	{
 	
-	int index = (int) Math.round((Math.random()*k));
+	int k = centroids.size();
+	int n = dataset.size();
+		
+	Random r = new Random();
+	int index = r.nextInt(k);
+	int indexC = r.nextInt(n);
 	boolean stop = false;	
 	DataPoint centroid = null;
-	List<DataPoint> newNode = new ArrayList<DataPoint>();
-
-    while (!stop) {
-        
+	List<DataPoint> newNode = new ArrayList<DataPoint>(centroids);
+    
+	
+    while (!stop) 
+    {    
     	stop = true;	
-        centroid = dataset.get((int) Math.round(Math.random()*n));
+        centroid = dataset.get(indexC);
         
         for (int i = 0; i < k; i++)
         {
-            if (centroid == centroids.get(i)) 
+            if (centroid.idAttribute.equalsIgnoreCase(centroids.get(i).idAttribute)) 
             {
             	stop = false;
                 break;
             }
         }
     }
-
-    for (int j = 0; j < centroids.size();j++)
-    { 	
-    	if (j == index)
-    	{
-    		newNode.add(centroid);
-    	}
-    	newNode.add(centroids.get(j));	
-    }
-
+    
+    newNode.set(index, centroid);
     
     return newNode;
 	}
 	
-	//Change centroid
+	//Create random node
 	
-	public DissimilarityMatrix changeCentroid (List<DataPoint> dataset)
+	
+
 	
 	
 	
