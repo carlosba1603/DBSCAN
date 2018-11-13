@@ -15,7 +15,9 @@ public class Clarans {
 	
 	
 	
-	public Clarans( List<DataPoint> dataset, List<DataPoint> centroids, int maxNeighbors, int numLocal ) {
+	public static List<Cluster> clarans( List<DataPoint> dataset, List<DataPoint> centroids, int maxNeighbors, int numLocal ) {
+		
+		centroids = getRandomCentroids(dataset);
 		
 		n = dataset.size();
 		k = centroids.size();
