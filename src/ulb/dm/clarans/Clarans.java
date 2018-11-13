@@ -92,7 +92,7 @@ public class Clarans {
     while (!stop) 
     {    
     	stop = true;	
-        centroid = dataset.get(indexC);
+        centroid = dataset.get(indexC); 
         
         for (int i = 0; i < k; i++)
         {
