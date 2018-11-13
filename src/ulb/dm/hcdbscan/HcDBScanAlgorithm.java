@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.TreeMap;
 
 import ulb.dm.clarans.Clarans;
 import ulb.dm.clustering.Cluster;
@@ -32,8 +33,8 @@ public class HcDBScanAlgorithm {
 				
 		
 		List<DataPoint> dataset = new ArrayList<>();
-		double epsilon = 3.0;
-		double alfa = 10.0;
+		double epsilon = 5.0;
+		double alfa = 5.0;
 		int minPoints = 5;
 		
 		try {
@@ -84,7 +85,7 @@ public class HcDBScanAlgorithm {
 		}
 		
 		//Merge all DBSCAN clusters
-		hcDbscanClusterList = mergeDbscanClusters( labelClusterList( clusterListBeforeMerge ), alfa );
+		hcDbscanClusterList = mergeDbscanClusters( labelClusterList( clusterListBeforeMerge ), alfa, 10.0 );
 		
 		return hcDbscanClusterList;
 		
@@ -92,7 +93,7 @@ public class HcDBScanAlgorithm {
 	
 	public static Map<String,Cluster> labelClusterList( List<Cluster> clusters ){
 		
-		Map<String,Cluster> clusterMap = new HashMap<>();
+		Map<String,Cluster> clusterMap = new TreeMap<>();
 		
 		for( int i = 0 ; i < clusters.size(); i++ ) {
 			
@@ -103,15 +104,21 @@ public class HcDBScanAlgorithm {
 			
 		}
 		
+		for( Map.Entry<String, Cluster> entry : clusterMap.entrySet() ) {
+			
+			System.out.println( entry.getKey() +" - "+entry.getValue().dataPoints.size() );
+			
+		}
+		
 		return clusterMap;
 		
 	}
 	
-	public static List<Cluster> mergeDbscanClusters( Map<String,Cluster> clusterMap, double alfa ){
+	public static List<Cluster> mergeDbscanClusters( Map<String,Cluster> clusterMap, double alfa, double epsilon ){
 		
 		List<Cluster> clusterList = new ArrayList<>();
 		
-		Map<String,Double> adjacentList = getAdjacentList( clusterMap );
+		Map<String,Double> adjacentList = getRIAdjacentList( clusterMap, epsilon );
 		
 		for ( Cluster c : clusterMap.values() ) {
 			
@@ -131,15 +138,93 @@ public class HcDBScanAlgorithm {
 			}
 		}
 		
+		for( Cluster c : clusterList ) {
+			
+			System.out.println( c.dataPoints.size() );
+			
+		}
+		
 		return clusterList;
 		
 	}
 	
-	public static Map<String,Double> getAdjacentList( Map<String,Cluster>  clusterMap ){
+	public static Map<String,Double> getRIAdjacentList( Map<String,Cluster>  clusterMap, double epsilon ){
 		
-		//TODO implement algorithm
+		HashMap<String,Double> interconectivityAdjacentList = new HashMap<>();
+		
+		
+		for( Cluster c : clusterMap.values() ) {
+			
+			for( Cluster d : clusterMap.values() ) {
+				
+				if( c != d ) {
+					
+					if( !( interconectivityAdjacentList.containsKey( c.label+"-"+d.label ) || interconectivityAdjacentList.containsKey( d.label+"-"+c.label ) ) ) {
+						
+						double currentAlfa = getRIAlfa( c, d, epsilon );
+						
+						interconectivityAdjacentList.put( c.label+"-"+d.label, currentAlfa );
+						
+					}
+					
+				}
+				
+			}
+			
+		}		
 		
 		return new HashMap<String,Double>();
+	}
+	
+	public static double getRIAlfa( Cluster c, Cluster d , double epsilon ) {
+		
+		double alfa = 0.0;
+		
+
+		List<Double> edges = getEdges( c, d , epsilon );
+
+
+		alfa = edges.size() / getSumEdges( edges );
+		
+		return alfa;
+		
+	}
+	
+	public static List<Double> getEdges( Cluster c1, Cluster c2, double epsilon ){
+		
+		List<Double> edges = new ArrayList<>();
+		
+		for( DataPoint d1 : c1.dataPoints ) {
+			if( d1.pointType == DataPointType.BORDER  ) {
+				for( DataPoint d2 : c2.dataPoints ) {
+					if( d2.pointType == DataPointType.BORDER  ) {
+						
+						double eDistance = d1.getEuclidianDistance( d2 );
+						
+						if( eDistance <= epsilon ) {
+							edges.add( eDistance );
+						}
+						
+					}
+				}
+			}
+		}		
+		
+		return edges;
+		
+	}
+	
+	
+	public static double getSumEdges( List<Double> edges ) {
+		
+		double sum = 0.0;
+		
+		for( Double edge : edges ) {
+			sum += edge;
+		}
+		
+		return sum;
+		
 	}
 	
 	

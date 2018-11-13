@@ -6,16 +6,13 @@ import java.util.Set;
 
 public class Cluster {
 	
-	public Set<DataPoint> dataPoints;//USe for clarans only
+	public Set<DataPoint> dataPoints;
 	
 	
 	public String label;
 	public boolean visited;
 	public boolean clustered;
 	
-	//For dbscan
-	public List<DataPoint> coreDataPoints;
-	public List<DataPoint> borderDataPoints;
 	
 	public DataPoint centroid;
 	
