@@ -2,6 +2,7 @@ package ulb.dm.clarans;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -34,21 +35,25 @@ public class Clarans {
 		hc3.put("Actions", "id141");
 		hc3.put("C1", "50.3583738409");
 		hc3.put("C2", "47.3792286943");	
-		DataPoint c3 = new DataPoint(hc3, "id141");        
+		DataPoint c3 = new DataPoint(hc3, "id141");
 		centroids.add(c3);	
 
-		
 		
 		int n = dataset.size();
 		int k = centroids.size();
 		
-		//Creates dissimilarity matrix with centroids from the Hilbert Curve
-		DissimilarityMatrix matrix = new DissimilarityMatrix(dataset, centroids);
 		
-		List<DataPoint> h = getRandomNode(dataset,centroids);
+		Node initialSol = new Node (dataset, centroids);
+		//Iterator i = initial.DissimilarityMatrix.keySet().iterator();
+		//while (i.hasNext())
+		//{
+		//	String key = (String) i.next();
+		//System.out.println("llave "+key+";valor"+initial.DissimilarityMatrix.get(key).centroid.idAttribute);
+		//}
+		//List<DataPoint> h = getRandomNode(dataset,centroids);
 		
 
-		//claransAlgorithm();
+	     claransAlgorithm(initialSol,maxNeighbors, numLocal );
 		
 		List<Cluster> claransClusters = new ArrayList<>();
 		
@@ -72,8 +77,10 @@ public class Clarans {
 	
 	
 	//Clarans 
-	public List<DataPoint> ClaransAlgorithm ()
+	public static List<DataPoint> claransAlgorithm (Node initialSol,int maxNeighbors, int numLocal )
 	{
+		//Iterate over
+		
 		return null;
 	}
 	
@@ -114,9 +121,32 @@ public class Clarans {
 	}
 	
 	//Create random node
-	
+	public static List<DataPoint> getRandomNode (List<DataPoint> dataset, int k)
+	{
+		ArrayList <Integer> indexes = new ArrayList <Integer>();
+		int n = dataset.size();
+		
+		for (int i = 0;i<k;i++)
+		{
+			Random r = new Random();
+			int index = r.nextInt(n);
+			
+			
+		}
+	}
 	
 
+	//Check unique random numbers
+	public static checkRandomNum (ArrayList <Integer> numbers, int num)
+	{
+		for (int i = 0; i < numbers.size(); i++)
+		{
+			if(num = numbers.get(i))
+			{
+				
+			}
+		}
+	}
 	
 	
 	
