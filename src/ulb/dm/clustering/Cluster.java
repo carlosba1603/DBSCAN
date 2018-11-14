@@ -20,7 +20,14 @@ public class Cluster {
 		this.dataPoints = new HashSet<>();
 	}
 	
-	public Cluster( HashSet<DataPoint> dataPoints ) {
+	public Cluster( HashSet<DataPoint> dataPoints ) 
+	{
 		this.dataPoints = dataPoints;
+	}
+	
+	public Cluster(DataPoint centroid ) 
+	{
+		this.dataPoints = new HashSet<>();
+		this.centroid = centroid;
 	}
 }

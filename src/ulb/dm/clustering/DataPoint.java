@@ -7,7 +7,7 @@ public class DataPoint {
 	
 	
 	
-	HashMap<String,String> attributtes;
+	public HashMap<String,String> attributtes;
 	public String idAttribute;
 	
 	public DataPointType pointType;

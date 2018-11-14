@@ -45,10 +45,20 @@ public class HcDBScanAlgorithm {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+<<<<<<< Upstream, based on branch 'develop' of https://github.com/carlosba1603/DBSCAN.git
 
 		List<Cluster> hcDbscan = hcDbscanIndividualTest(dataset, alfa, epsilon, minPoints);
 		// List<Cluster> hcDbscan = hcDbscan( dataset, alfa, epsilon, minPoints );
 
+=======
+		
+		
+		
+		//List<Cluster> hcDbscan = hcDbscanIndividualTest(  dataset, alfa, epsilon,  minPoints );
+		List<Cluster> hcDbscan = hcDbscan(  dataset, alfa, epsilon,  minPoints );
+		
+		
+>>>>>>> b0f52f0 Clarans
 		System.out.println("\nFinished");
 
 	}
