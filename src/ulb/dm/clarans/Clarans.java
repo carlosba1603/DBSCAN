@@ -42,7 +42,7 @@ public class Clarans
 		int k = centroids.size();
 		
 		
-		Node initialSol = new Node (dataset, centroids);
+		Node initialSol = new Node (dataset, centroids); 
 		
 		//Iterator i = initialSol.DissimilarityMatrix.keySet().iterator();
 		//while (i.hasNext())
