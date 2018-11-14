@@ -57,6 +57,7 @@ public class HcDBScanAlgorithm {
 			int minPoints) {
 
 		List<Cluster> hcDbscanClusterList;
+		
 
 		List<Cluster> claransClusterList = DBScan.dbscan(dataset, epsilon, minPoints);
 
