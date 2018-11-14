@@ -13,14 +13,12 @@ public class Node
 	public List<DataPoint> centroids;
 	public double distanceCost;
 	public HashMap<String,Cluster> clusters =  new HashMap<String,Cluster>();
-	
-	
 	HashMap <String,DissimilarityPoint> DissimilarityMatrix = new HashMap <String,DissimilarityPoint>();
 	
 	public Node (List<DataPoint> dataset, List<DataPoint> centroids)
 	{
 		this.centroids = centroids;
-		for (int i = 1; i < centroids.size();i++)
+		for (int i = 0; i < centroids.size();i++)
 		{
 			Cluster c = new Cluster(centroids.get(i));
 			String att = centroids.get(i).idAttribute;

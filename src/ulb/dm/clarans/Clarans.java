@@ -111,7 +111,7 @@ public class Clarans
 		 
 	Random r = new Random();
 	int index = r.nextInt(k);
-	int indexC = r.nextInt(n); 
+
 	boolean stop = false;	
 	DataPoint centroid = null;
 	List<DataPoint> newNode = new ArrayList<DataPoint>(centroids);
@@ -120,6 +120,7 @@ public class Clarans
     while (!stop) 
     {    
     	stop = true;	
+    	int indexC = r.nextInt(n); 
         centroid = dataset.get(indexC); 
         
         for (int i = 0; i < k; i++)

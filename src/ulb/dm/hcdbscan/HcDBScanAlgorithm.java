@@ -45,20 +45,14 @@ public class HcDBScanAlgorithm {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-<<<<<<< Upstream, based on branch 'develop' of https://github.com/carlosba1603/DBSCAN.git
 
-		List<Cluster> hcDbscan = hcDbscanIndividualTest(dataset, alfa, epsilon, minPoints);
-		// List<Cluster> hcDbscan = hcDbscan( dataset, alfa, epsilon, minPoints );
 
-=======
-		
-		
-		
+
 		//List<Cluster> hcDbscan = hcDbscanIndividualTest(  dataset, alfa, epsilon,  minPoints );
 		List<Cluster> hcDbscan = hcDbscan(  dataset, alfa, epsilon,  minPoints );
 		
 		
->>>>>>> b0f52f0 Clarans
+
 		System.out.println("\nFinished");
 
 	}
@@ -88,7 +82,7 @@ public class HcDBScanAlgorithm {
 		List<DataPoint> centroids = HilbertCurveIndexing.getCentroids(dataset, true);
 
 		// Get clarans clusters for DBSCAN
-		int maxNeighbors = 2; // To confirm with Ainhoa
+		int maxNeighbors = (int) Math.round(0.0125*centroids.size()*(dataset.size()-centroids.size())); 
 		int numLocal = 2;
 
 		List<Cluster> claransClusterList = Clarans.clarans(dataset, centroids, maxNeighbors, numLocal);
