@@ -1,9 +1,10 @@
 package ulb.dm.clustering;
+import java.util.Comparator;
 import java.util.HashMap;
 
 
 
-public class DataPoint {
+public class DataPoint implements Comparable<DataPoint>{
 	
 	
 	
@@ -13,6 +14,7 @@ public class DataPoint {
 	public DataPointType pointType;
 	public boolean visited;
 	public boolean clustered;
+	public int hilbertIndex;
 	
 	public DataPoint( HashMap<String,String> attributtes, String idAttribute ) {
 		
@@ -45,4 +47,15 @@ public class DataPoint {
 		
 		return a-b;
 	}
+
+	@Override
+	public int compareTo(DataPoint o) {
+		// TODO Auto-generated method stub
+		
+		int compareH = this.hilbertIndex - o.hilbertIndex;
+		
+		return compareH;
+	}
+
+
 }

@@ -1,5 +1,6 @@
 package ulb.dm.hcdbscan;
 
+import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import ulb.dm.hilbert.HilbertCurveIndexing;
 public class HcDBScanAlgorithm {
 
 	public static String idAttribute;
+	public static Double maxPoint;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -32,6 +34,7 @@ public class HcDBScanAlgorithm {
 			return;
 		}
 
+		
 		List<DataPoint> dataset = new ArrayList<>();
 		double epsilon = 5.0;
 		double alfa = 0.3;
@@ -79,7 +82,8 @@ public class HcDBScanAlgorithm {
 		List<Cluster> clusterListBeforeMerge = new ArrayList<>();
 
 		// Get the centroids for CLARANS
-		List<DataPoint> centroids = HilbertCurveIndexing.getCentroids(dataset, true);
+		int curveOrder = 4;
+		List<DataPoint> centroids = HilbertCurveIndexing.getHilbertCentroids(dataset, curveOrder, maxPoint);
 
 		// Get clarans clusters for DBSCAN
 		int maxNeighbors = (int) Math.round(0.0125*centroids.size()*(dataset.size()-centroids.size())); 
@@ -364,6 +368,7 @@ public class HcDBScanAlgorithm {
 
 		File csvFile = new File(fileName);
 		Scanner scanner = new Scanner(csvFile);
+		ArrayList <Double> allPoints = new ArrayList <Double>();
 
 		List<DataPoint> dataset = new ArrayList<>();
 
@@ -374,14 +379,32 @@ public class HcDBScanAlgorithm {
 			String[] data = scanner.nextLine().split(",");
 			HashMap<String, String> row = new HashMap<>();
 
-			for (int i = 0; i < attributes.length; i++) {
-				if (!attributes[i].equals("C3"))
+			for (int i = 0; i < Math.min(attributes.length,3); i++) 
+			{
 					row.put(attributes[i], data[i]);
+			
+					if (!attributes[i].equals(idAttribute))
+					{
+						allPoints.add(Double.parseDouble(data[i]));
+					}
+				
 			}
 
 			dataset.add(new DataPoint(row, idAttribute));
 
 		}
+		
+		//Choose max to normalize for Hilbert curve
+		double maxPointN = 0;
+		for (int k = 0; k < allPoints.size(); k++)
+		{
+			if (maxPointN < allPoints.get(k)) 
+			{
+				maxPointN = allPoints.get(k);
+			}
+		}
+		
+		maxPoint = maxPointN;
 
 		scanner.close();
 

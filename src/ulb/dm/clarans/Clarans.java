@@ -14,30 +14,7 @@ public class Clarans
 	
 	public static List<Cluster> clarans( List<DataPoint> dataset, List<DataPoint> centroids, int maxNeighbors, int numLocal ) {
 		
-		
-		centroids = new ArrayList<DataPoint> ();
-		HashMap<String,String> hc1 = new HashMap<String,String> ();
-		hc1.put("Actions", "id137");
-		hc1.put("C1", "6.47390395996");
-		hc1.put("C2", "93.7242014429");	
-		DataPoint c1 = new DataPoint(hc1, "Actions");
-		centroids.add(c1);
-		
-		HashMap<String,String> hc2 = new HashMap<String,String> ();
-		hc2.put("Actions", "id91");
-		hc2.put("C1", "94.1977118379");
-		hc2.put("C2", "4.09522116449");	
-		DataPoint c2 = new DataPoint(hc2, "Actions");
-		centroids.add(c2);
-		
-		HashMap<String,String> hc3 = new HashMap<String,String> ();
-		hc3.put("Actions", "id141");
-		hc3.put("C1", "50.3583738409");
-		hc3.put("C2", "47.3792286943");	
-		DataPoint c3 = new DataPoint(hc3, "Actions");
-		centroids.add(c3);	
-
-		
+				
 		int n = dataset.size();
 		int k = centroids.size();
 		
