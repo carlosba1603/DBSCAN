@@ -82,7 +82,7 @@ public class HcDBScanAlgorithm {
 		List<Cluster> clusterListBeforeMerge = new ArrayList<>();
 
 		// Get the centroids for CLARANS
-		int curveOrder = 4;
+		int curveOrder = 8;
 		List<DataPoint> centroids = HilbertCurveIndexing.getHilbertCentroids(dataset, curveOrder, maxPoint);
 
 		// Get clarans clusters for DBSCAN

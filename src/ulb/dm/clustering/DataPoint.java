@@ -49,13 +49,33 @@ public class DataPoint implements Comparable<DataPoint>{
 	}
 
 	@Override
-	public int compareTo(DataPoint o) {
+	//Compare datapoints to sort them for Hilbert Curve
+	public int compareTo(DataPoint o) 
+	{
 		// TODO Auto-generated method stub
 		
 		int compareH = this.hilbertIndex - o.hilbertIndex;
 		
 		return compareH;
 	}
+	
+	
+	//Overrides for printing
+	public String toString()
+	{
+		String s = "";
+		int cont=0;
+		for( String key :  attributtes.keySet() ) 
+		{
+			if( !key.equalsIgnoreCase( this.idAttribute ) ) 
+			{
+				if (cont != 0)
+				s+=";";
 
-
+				s += attributtes.get(key) ;
+				cont++;
+			}
+		}
+		return s;
+	}	
 }

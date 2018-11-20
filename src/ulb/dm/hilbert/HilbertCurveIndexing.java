@@ -9,10 +9,28 @@ import java.util.List;
 import ulb.dm.clustering.Cluster;
 import ulb.dm.clustering.DataPoint;
 
-
+//Hilbert curve implementation
 public class HilbertCurveIndexing 
 {
 	
+	//Main method 
+	public static List<DataPoint> getHilbertCentroids( List<DataPoint> dataset, int curveOrder, double maxPoint )
+	{
+		
+		List<DataPoint> indexedData = indexData(dataset, curveOrder, maxPoint);
+		
+		//Order centroids
+		List<DataPoint> centroids = orderAndCluster(indexedData);	
+		
+		for (int c = 0; c < centroids.size();c++)
+		{
+		System.out.println(centroids.get(c));
+		}
+		return centroids;
+	}
+	
+	
+	//Indexing data to Hilbert curve by using referenced code and normalizing it
 	public static List<DataPoint> indexData( List<DataPoint> dataset, int curveOrder, double maxPoint )
 	{
 		ArrayList<DataPoint> indexedPoints = new ArrayList <DataPoint>();
@@ -60,62 +78,43 @@ public class HilbertCurveIndexing
 		
 		}
 
-	
-	
-
-	
-	public static List<DataPoint> getHilbertCentroids( List<DataPoint> dataset, int curveOrder, double maxPoint ){
-		
-		
-
-		List<DataPoint> indexedData = indexData(dataset, curveOrder, maxPoint);
-		
-		//Order centroids
-		List<DataPoint> centroids = orderAndCluster(indexedData);
-		
-		
-		
-		return centroids;
-	}
-	
-
 	//Order and cluster centroids
 	public static List<DataPoint> orderAndCluster (List<DataPoint> indexedData)
 	{
 	
 		List<DataPoint> centroids = new ArrayList <DataPoint>();
-	 //Sort
-	 Collections.sort(indexedData);
+		//Sort
+		Collections.sort(indexedData);
 	 
-	 //Cluster with a difference of 1
+		//Cluster with a difference of 1
 	 
-	 List <ArrayList<DataPoint>> clusters = new ArrayList <ArrayList<DataPoint>> ();
-
-	 ArrayList<DataPoint> cluster = new ArrayList <DataPoint>  ();
-	 for (int i = 1; i<indexedData.size();i++)
-	 {
-		 if(i == 1)
-			 cluster.add(indexedData.get(0));
-		 if(indexedData.get(i).hilbertIndex-indexedData.get(i-1).hilbertIndex <=1)
-			 cluster.add(indexedData.get(i));
-		 else
+		List <ArrayList<DataPoint>> clusters = new ArrayList <ArrayList<DataPoint>> ();
+	
+		 ArrayList<DataPoint> cluster = new ArrayList <DataPoint>  ();
+		 for (int i = 1; i<indexedData.size();i++)
 		 {
-			 clusters.add(cluster);
-			 cluster = new ArrayList <DataPoint>  ();
-		     cluster.add(indexedData.get(i));
+			 if(i == 1)
+				 cluster.add(indexedData.get(0));
+			 if(indexedData.get(i).hilbertIndex-indexedData.get(i-1).hilbertIndex <=1)
+				 cluster.add(indexedData.get(i));
+			 else
+			 {
+				 clusters.add(cluster);
+				 cluster = new ArrayList <DataPoint>  ();
+			     cluster.add(indexedData.get(i));
+			 }
+				 
+	 }
+		    //Add last cluster
+		    clusters.add(cluster);
+	 
+	 
+		 //Get median
+		 for (int j = 0; j <clusters.size();j++)
+		 {
+			 int medianIndex = getMedian(clusters.get(j));
+			 centroids.add(clusters.get(j).get(medianIndex));
 		 }
-			 
-	 }
-	    //Add last cluster
-	    clusters.add(cluster);
-	 
-	 
-	 //Get median
-	 for (int j = 0; j <clusters.size();j++)
-	 {
-		 int medianIndex = getMedian(clusters.get(j));
-		 centroids.add(clusters.get(j).get(medianIndex));
-	 }
 	 
 	 return centroids;
 	}
@@ -135,6 +134,9 @@ public class HilbertCurveIndexing
 		 return medianIndex;
 	}
 	
+	
+	
+//Referenced code	
 	
 	/**
 	 * Find the Hilbert order (=vertex index) for the given grid cell 
