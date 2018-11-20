@@ -112,8 +112,14 @@ public class HilbertCurveIndexing
 		 //Get median
 		 for (int j = 0; j <clusters.size();j++)
 		 {
-			 int medianIndex = getMedian(clusters.get(j));
-			 centroids.add(clusters.get(j).get(medianIndex));
+			 if (clusters.get(j).size() == 1)
+				 centroids.add(clusters.get(j).get(0));
+			 
+			 else
+			 {
+				 int medianIndex = getMedian(clusters.get(j));
+				 centroids.add(clusters.get(j).get(medianIndex));
+			 }
 		 }
 	 
 	 return centroids;

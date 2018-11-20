@@ -36,9 +36,13 @@ public class Clarans
 	    List<Cluster> claransClusters = new ArrayList<>();
 	    //Create clusters
 	    Iterator t = optCentroids.clusters.values().iterator();
+	    System.out.println("Clarans");
+	    System.out.println("Centroid;C1;C2");
 	    while(t.hasNext())
 	    {
-	    	claransClusters.add((Cluster) t.next());
+	    	Cluster c = (Cluster) t.next();
+	    	claransClusters.add(c);
+	    	System.out.println(c);
 	    }
 
 		return claransClusters;
