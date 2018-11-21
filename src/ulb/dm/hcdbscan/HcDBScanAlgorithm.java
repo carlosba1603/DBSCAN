@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -36,8 +37,8 @@ public class HcDBScanAlgorithm {
 
 		
 		List<DataPoint> dataset = new ArrayList<>();
-		double epsilon = 5.0;
-		double alfa = 0.3;
+		double epsilon = 10.0;
+		double alfa = 0.16;
 		int minPoints = 3;
 
 		try {
@@ -49,30 +50,8 @@ public class HcDBScanAlgorithm {
 			e.printStackTrace();
 		}
 
-
-
-		//List<Cluster> hcDbscan = hcDbscanIndividualTest(  dataset, alfa, epsilon,  minPoints );
 		List<Cluster> hcDbscan = hcDbscan(  dataset, alfa, epsilon,  minPoints );
 		
-		
-
-		System.out.println("\nFinished");
-
-	}
-
-	public static List<Cluster> hcDbscanIndividualTest(List<DataPoint> dataset, double alfa, double epsilon,
-			int minPoints) {
-
-		List<Cluster> hcDbscanClusterList;
-		
-
-		List<Cluster> claransClusterList = DBScan.dbscan(dataset, epsilon, minPoints);
-
-		Map<String, Cluster> labelClusterList = labelClusterList(claransClusterList);
-		// Merge all DBSCAN clusters
-		hcDbscanClusterList = mergeDbscanClusters(dataset,labelClusterList, alfa, 10.0);
-
-		return hcDbscanClusterList;
 
 	}
 
@@ -101,24 +80,34 @@ public class HcDBScanAlgorithm {
 			clusterListBeforeMerge.addAll(dbscanClusterList);
 
 		}
+		
+		Map<String, Cluster> labelClusterList = labelClusterList(clusterListBeforeMerge, "DBSCAN");
+		
+		System.out.println("=== DBSCAN ===\n");
+		
+		for( Cluster c : labelClusterList.values() ) {
+			
+			System.out.println( c.label+" size: "+c.dataPoints.size()+c );
+			
+		}
 
 		// Merge all DBSCAN clusters
-		hcDbscanClusterList = mergeDbscanClusters(dataset,labelClusterList(clusterListBeforeMerge), alfa, epsilon);
+		hcDbscanClusterList = mergeDbscanClusters(dataset, labelClusterList, alfa, epsilon);
 
 		return hcDbscanClusterList;
 
 	}
 
-	public static Map<String, Cluster> labelClusterList(List<Cluster> clusters) {
+	public static Map<String, Cluster> labelClusterList(List<Cluster> clusters , String label ) {
 
-		Map<String, Cluster> clusterMap = new TreeMap<>();
+		Map<String, Cluster> clusterMap = new LinkedHashMap<>();
 
 		for (int i = 0; i < clusters.size(); i++) {
 
 			Cluster c = clusters.get(i);
-			c.label = "" + i;
+			c.label = label + "_" + i;
 
-			clusterMap.put("" + i, c);
+			clusterMap.put(c.label, c);
 
 		}
 
@@ -154,20 +143,19 @@ public class HcDBScanAlgorithm {
 
 				clusterList.add(newCluster);
 
-				clusterList.add(newCluster);
-
 			}
 		}
 
-		System.out.println("\n======================= After DBSCAN merge ========================");
+		System.out.println("\n======================= HC-DBSCAN =========================\n");
 
-		int i = 0;
-
-		for (Cluster c : clusterList) {
-
-			System.out.println("Cluster " + (i++) + " :\t" + c.dataPoints.size());
-
+		Map<String, Cluster> labelClusterList = labelClusterList( clusterList, "HC-DBSCAN");
+		
+		for( Cluster c : labelClusterList.values() ) {
+					
+			System.out.println( c.label+" size: "+c.dataPoints.size()+c );
+					
 		}
+
 
 		return clusterList;
 
@@ -231,11 +219,19 @@ public class HcDBScanAlgorithm {
 		double eDistance;
 
 		for (Cluster currentCluster : clusterMap.values()) {
-			for (DataPoint p : currentCluster.dataPoints) {
-				if (p.pointType == DataPointType.CORE) {
+			
+			List<DataPoint> datapoints = new ArrayList<>( currentCluster.dataPoints );
+			
+			for ( int i = 0; i < datapoints.size(); i++ ) {
+				DataPoint p = datapoints.get(i);
+				
+				if ( p.pointType == DataPointType.CORE ) {
+					
 					eDistance = currentNoise.getEuclidianDistance(p);
-					if (eDistance <= epsilon) {
+					
+					if ( eDistance <= epsilon ) {
 						currentNoise.pointType = DataPointType.BORDER;
+						currentNoise.visited = true;
 						currentNoise.clustered = true;
 						currentCluster.dataPoints.add(currentNoise);
 
@@ -347,10 +343,14 @@ public class HcDBScanAlgorithm {
 
 				if (aDistance <= alfa) {
 
-					String neighborLabel = key.replace(c.label, "").replaceAll("-", "");
+					String neighborLabel = clusterKeys[0].equals(c.label) ? clusterKeys[1] : clusterKeys[0];
 
 					Cluster neighbour = clusterMap.get(neighborLabel);
 
+					if( neighbour == null ) {
+						System.out.println( neighborLabel );
+					}
+					
 					if (!neighborClusterList.contains(neighbour)) {
 						neighborClusterList.add(neighbour);
 					}

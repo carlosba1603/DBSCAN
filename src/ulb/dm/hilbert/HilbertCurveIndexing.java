@@ -22,9 +22,10 @@ public class HilbertCurveIndexing
 		//Order centroids
 		List<DataPoint> centroids = orderAndCluster(indexedData);	
 		
+		System.out.println("=== HILBERT CENTROIDS ===\n");
 		for (int c = 0; c < centroids.size();c++)
 		{
-		System.out.println(centroids.get(c));
+			System.out.println(centroids.get(c));
 		}
 		return centroids;
 	}

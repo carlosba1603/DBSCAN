@@ -35,13 +35,12 @@ public class Cluster {
 	
 	public String toString()
 	{
-		String s = "";
+		String s = centroid != null ? "\n Centroid: "+centroid+"\n\n" : "\n\n";
 		Iterator<DataPoint> i = dataPoints.iterator();
-		while (i.hasNext())
-		{
-			s+=centroid+";"+i.next().toString()+"\n";
-		}
 		
+		for( DataPoint d : dataPoints ) {
+			s+=i.next().toString()+"\n";
+		}
 		
 		return s;
 	}

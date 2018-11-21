@@ -63,14 +63,14 @@ public class DataPoint implements Comparable<DataPoint>{
 	//Overrides for printing
 	public String toString()
 	{
-		String s = "";
+		String s = "\t";
 		int cont=0;
 		for( String key :  attributtes.keySet() ) 
 		{
 			if( !key.equalsIgnoreCase( this.idAttribute ) ) 
 			{
 				if (cont != 0)
-				s+=";";
+				s+=",\t";
 
 				s += attributtes.get(key) ;
 				cont++;
