@@ -1,25 +1,26 @@
 package ulb.dm.clustering;
+import java.util.Comparator;
 import java.util.HashMap;
 
 
-public class DataPoint {
+
+public class DataPoint implements Comparable<DataPoint>{
 	
 	
 	
-	HashMap<String,String> attributtes;
-	String idAttribute;
+	public HashMap<String,String> attributtes;
+	public String idAttribute;
 	
 	public DataPointType pointType;
 	public boolean visited;
 	public boolean clustered;
-	
+	public int hilbertIndex;
 	
 	public DataPoint( HashMap<String,String> attributtes, String idAttribute ) {
 		
 		this.attributtes = attributtes;
 		this.idAttribute = idAttribute;
 		this.pointType = DataPointType.NOISE;
-		
 	}
 	
 	public double getEuclidianDistance( DataPoint p1  ) {
@@ -46,4 +47,35 @@ public class DataPoint {
 		
 		return a-b;
 	}
+
+	@Override
+	//Compare datapoints to sort them for Hilbert Curve
+	public int compareTo(DataPoint o) 
+	{
+		// TODO Auto-generated method stub
+		
+		int compareH = this.hilbertIndex - o.hilbertIndex;
+		
+		return compareH;
+	}
+	
+	
+	//Overrides for printing
+	public String toString()
+	{
+		String s = "\t";
+		int cont=0;
+		for( String key :  attributtes.keySet() ) 
+		{
+			if( !key.equalsIgnoreCase( this.idAttribute ) ) 
+			{
+				if (cont != 0)
+				s+=",\t";
+
+				s += attributtes.get(key) ;
+				cont++;
+			}
+		}
+		return s;
+	}	
 }
