@@ -48,7 +48,6 @@ public class DBScan {
 			
 		
 			DataPoint p1 = neighborPoints.get(i);
-			p1.pointType = DataPointType.BORDER;
 			
 			if( !p1.visited ) {
 				
@@ -74,6 +73,10 @@ public class DBScan {
 			if( !p1.clustered ) {
 				p1.clustered = true;
 				
+				if( p1.pointType == DataPointType.NOISE ) {
+					p1.pointType = DataPointType.BORDER;
+				}
+				
 				currentCluster.dataPoints.add(p1);
 			}
 		}
@@ -90,7 +93,6 @@ public class DBScan {
 			
 			if( d != p && eDistance <= epsilon ) {
 				if( !neighborPoints.contains( d ) ) {
-					d.pointType = DataPointType.BORDER;
 					neighborPoints.add( d );
 				}
 			}			

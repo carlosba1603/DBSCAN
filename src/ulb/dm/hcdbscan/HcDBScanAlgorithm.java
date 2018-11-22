@@ -38,8 +38,8 @@ public class HcDBScanAlgorithm {
 		
 		List<DataPoint> dataset = new ArrayList<>();
 		double epsilon = 10.0;
-		double alfa = 0.16;
-		int minPoints = 3;
+		double alfa = 0.155;
+		int minPoints = 4;
 
 		try {
 
@@ -52,7 +52,45 @@ public class HcDBScanAlgorithm {
 
 		List<Cluster> hcDbscan = hcDbscan(  dataset, alfa, epsilon,  minPoints );
 		
+		System.out.println("\n=== Normal DBSCAN === epsilon: "+epsilon+" minPoints: "+minPoints+"\n");
+		
+		dataset = new ArrayList<>();
+		try {
 
+			// Read the dataset
+			dataset = readCSVFile(args[0], args[1]);
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		List<Cluster> dbscan = dbscan(  dataset, epsilon,  minPoints );
+		
+		
+
+	}
+	
+	public static List<Cluster> dbscan(List<DataPoint> dataset, double epsilon, int minPoints) {
+		
+		List<Cluster> dbscan = DBScan.dbscan(  dataset, epsilon,  minPoints );
+		Map<String, Cluster> labelClusterList = labelClusterList(dbscan, "DBSCAN");
+		
+		for( Cluster c : labelClusterList.values() ) {
+			
+			System.out.println( c.label+" size: "+c.dataPoints.size()+c );
+			
+		}
+		
+		System.out.println("\nDBSCAN_Noise\n");
+		
+		for( DataPoint p : dataset ) {
+			
+			if( p.pointType == DataPointType.NOISE )
+				System.out.println( p );
+			
+		}
+		
+		return dbscan;
 	}
 
 	public static List<Cluster> hcDbscan(List<DataPoint> dataset, double alfa, double epsilon, int minPoints) {
@@ -90,6 +128,24 @@ public class HcDBScanAlgorithm {
 			System.out.println( c.label+" size: "+c.dataPoints.size()+c );
 			
 		}
+		
+		System.out.println("\nDBSCAN_Noise\n");
+		
+		for( DataPoint p : dataset ) {
+			
+			if( p.pointType == DataPointType.NOISE )
+				System.out.println( p );
+			
+		}
+		
+		/*System.out.println("\nDBSCAN_CORE\n");
+		
+		for( DataPoint p : dataset ) {
+			
+			if( p.pointType == DataPointType.CORE )
+				System.out.println( p );
+			
+		}*/
 
 		// Merge all DBSCAN clusters
 		hcDbscanClusterList = mergeDbscanClusters(dataset, labelClusterList, alfa, epsilon);
@@ -146,7 +202,7 @@ public class HcDBScanAlgorithm {
 			}
 		}
 
-		System.out.println("\n======================= HC-DBSCAN =========================\n");
+		System.out.println("\n======================= HC-DBSCAN ========================= alfa: "+alfa+" epsilon: "+epsilon+"\n");
 
 		Map<String, Cluster> labelClusterList = labelClusterList( clusterList, "HC-DBSCAN");
 		
@@ -156,6 +212,14 @@ public class HcDBScanAlgorithm {
 					
 		}
 
+		System.out.println("\nHC-DBSCAN_Noise\n");
+		
+		for( DataPoint p : dataset ) {
+			
+			if( p.pointType == DataPointType.NOISE )
+				System.out.println( p );
+			
+		}
 
 		return clusterList;
 
@@ -262,9 +326,9 @@ public class HcDBScanAlgorithm {
 		List<Double> edges = new ArrayList<>();
 
 		for (DataPoint d1 : c1.dataPoints) {
-			if (d1.pointType == DataPointType.BORDER) {
+			if (d1.pointType == DataPointType.BORDER || d1.pointType == DataPointType.CORE ) {
 				for (DataPoint d2 : c2.dataPoints) {
-					if (d2.pointType == DataPointType.BORDER) {
+					if (d2.pointType == DataPointType.BORDER || d2.pointType == DataPointType.CORE ) {
 
 						double eDistance = d1.getEuclidianDistance(d2);
 

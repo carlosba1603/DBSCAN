@@ -64,13 +64,16 @@ public class DataPoint implements Comparable<DataPoint>{
 	public String toString()
 	{
 		String s = "\t";
+		
+		//s += this.pointType == DataPointType.CORE ? "* " : "";
+		
 		int cont=0;
 		for( String key :  attributtes.keySet() ) 
 		{
 			if( !key.equalsIgnoreCase( this.idAttribute ) ) 
 			{
 				if (cont != 0)
-				s+=",\t";
+				s+="\t";
 
 				s += attributtes.get(key) ;
 				cont++;
