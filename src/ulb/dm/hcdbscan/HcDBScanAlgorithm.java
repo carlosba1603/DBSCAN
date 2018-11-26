@@ -25,24 +25,30 @@ public class HcDBScanAlgorithm {
 
 	public static String idAttribute;
 	public static Double maxPoint;
+	public static double epsilon = 10.0;
+	public static double alfa = 0.155;
+	public static int minPoints = 4;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
 		// Validate if the console input has the csv file name and the class label.
-		if (args.length < 2) {
-			System.out.println("java ID3 [file.csv] [idColumn name]");
+		if (args.length < 5) {
+			System.out.println("java HcDBScanAlgorithm [file.csv] [idColumn_name] [epsilon] [minPoints] [alpha]  ");
 			return;
 		}
 
 		
 		List<DataPoint> dataset = new ArrayList<>();
-		double epsilon = 10.0;
-		double alfa = 0.155;
-		int minPoints = 4;
+		
+		
 
 		try {
 
+			epsilon = Double.parseDouble( args[2] );
+			minPoints = Integer.parseInt( args[3] );
+			alfa = Double.parseDouble( args[4] );
+			
 			// Read the dataset
 			dataset = readCSVFile(args[0], args[1]);
 
